@@ -5,3 +5,4 @@ gemspec
 
 gem 'byebug', group: [:development, :test]
 gem 'rspec-its', group: [:test]
+gem 'pry-byebug', group: [:development, :test]
