@@ -3,7 +3,7 @@ describe ActiveGraphQL::Model do
              retriable: { tries: 3 } }
 
   let(:configured_class) do
-    ConfiguredClass ||= Class.new(described_class) do
+    CONFIGURED_CLASS ||= Class.new(described_class) do
       configure config
     end
   end

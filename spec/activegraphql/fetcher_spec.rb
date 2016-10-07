@@ -85,7 +85,8 @@ describe ActiveGraphQL::Fetcher do
 
       expect(query).to receive(:get).with(*graph).and_return(response)
 
-      expect(Retriable).to receive(:retriable).with(expected_retriable_params).and_call_original
+      expect(Retriable).to receive(:retriable).with(expected_retriable_params)
+        .and_call_original
     end
 
     subject { fetcher.query_get(*graph) }

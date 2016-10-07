@@ -97,7 +97,8 @@ module ActiveGraphQL
       @auth_strategy ||= auth_config[:strategy]
     end
 
-    # ActiveGraphQL currently supports bearer authorization with given class to encode.
+    # ActiveGraphQL currently supports bearer authorization with given class to
+    # encode.
     # So if the "bearer" is not configured or the "class" is not present it's
     # returning a nil token.
     def auth_token
