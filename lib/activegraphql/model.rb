@@ -4,10 +4,10 @@ require 'activegraphql/helpers/model_helper'
 
 module ActiveGraphQL
   class Model < ::Hashie::Mash
-    include ActiveGraphQL::Helpers::ModelHelper
     class Error < StandardError; end
 
     class << self
+      include ActiveGraphQL::Helpers::ModelHelper
       attr_accessor :config
 
       # This provides ability to configure the class inherited from here.
