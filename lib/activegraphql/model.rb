@@ -51,6 +51,11 @@ module ActiveGraphQL
         build_fetcher(name.demodulize.underscore.to_sym, conditions)
       end
 
+      def order(conditions = {})
+        build_fetcher(name.demodulize.underscore.pluralize.to_sym,
+                                                        map_to_s(conditions))
+      end
+
       def build_fetcher(action, params = nil)
         Fetcher.new(config: configurable_class.config,
                     klass: self,
