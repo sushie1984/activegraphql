@@ -152,7 +152,7 @@ describe ActiveGraphQL::Query do
     end
 
     context 'with params' do
-      it { is_expected.to eq "someLongParamName1: \"value1\", someLongParamName2: \"value2\"" }
+      it { is_expected.to eq 'someLongParamName1: "value1", someLongParamName2: "value2"' }
     end
   end
 

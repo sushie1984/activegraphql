@@ -53,7 +53,7 @@ describe ActiveGraphQL::Model do
     it { is_expected.to be fetcher }
   end
 
-  describe '.where', with_expected_fetcher: true  do
+  describe '.where', with_expected_fetcher: true do
     let(:conditions) { double(:conditions) }
 
     let(:expected_fetcher_params) do
@@ -68,7 +68,7 @@ describe ActiveGraphQL::Model do
     it { is_expected.to be fetcher }
   end
 
-  describe '.find_by', with_expected_fetcher: true  do
+  describe '.find_by', with_expected_fetcher: true do
     let(:conditions) { double(:conditions) }
 
     let(:expected_fetcher_params) do
@@ -101,4 +101,4 @@ describe ActiveGraphQL::Model do
 
     it { is_expected.to be fetcher }
   end
- end
+end
