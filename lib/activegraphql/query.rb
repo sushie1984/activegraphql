@@ -17,6 +17,15 @@ module ActiveGraphQL
       response_data
     end
 
+    def post(*graph)
+      self.graph = graph
+
+      self.response = HTTParty.post(config[:url], request_options)
+
+      raise(ServerError, response_error_messages) if response_errors.present?
+      response_data
+    end
+
     def request_options
       {}.tap do |opts|
         opts[:query] = request_params
