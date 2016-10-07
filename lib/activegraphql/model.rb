@@ -1,8 +1,10 @@
 require 'active_support/core_ext'
 require 'hashie/mash'
+require 'activegraphql/helpers/model_helper'
 
 module ActiveGraphQL
   class Model < ::Hashie::Mash
+    include ActiveGraphQL::Helpers::ModelHelper
     class Error < StandardError; end
 
     class << self
