@@ -53,7 +53,7 @@ module ActiveGraphQL
 
       def order(conditions = {})
         build_fetcher(name.demodulize.underscore.pluralize.to_sym,
-                                                        map_to_s(conditions))
+                      map_to_s(conditions))
       end
 
       def build_fetcher(action, params = nil)
