@@ -82,4 +82,23 @@ describe ActiveGraphQL::Model do
 
     it { is_expected.to be fetcher }
   end
-end
+
+  describe '.order', with_expected_fetcher: true do
+    let(:conditions) { double(:conditions) }
+
+    let(:expected_fetcher_params) do
+      { config: config,
+        klass: configured_class,
+        action: :configured_classes,
+        params: conditions }
+    end
+
+    before do
+      allow(ActiveGraphQL::Model).to receive(:transform).and_return(conditions)
+    end
+
+    subject { configured_class.order(conditions) }
+
+    it { is_expected.to be fetcher }
+  end
+ end
