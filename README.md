@@ -161,7 +161,7 @@ It basically offers two configuration params:
 Your encoder class may look like that:
 ```ruby
 class YourEncoderClass
-  def self.secret 
+  def self.secret
     'your-safely-secured-secret'
   end
 
@@ -170,7 +170,7 @@ class YourEncoderClass
     payload = { exp: (Time.current.to_i + 100) }
     JWT.encode(payload, secret)
   end
-  
+
   def self.decode(token)
     JWT.decode(token, secret)
   end
@@ -183,5 +183,3 @@ class MyModel < ActiveGraphQL::Model
   configure auth: { strategy: :bearer, class: YourEncoderClass }
 end
 ```
-
-
