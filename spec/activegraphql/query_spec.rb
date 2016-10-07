@@ -42,7 +42,8 @@ describe ActiveGraphQL::Query do
 
     before do
       expect(HTTParty)
-        .to receive(:get).with(url, expected_request_options).and_return(response)
+        .to receive(:get).with(url, expected_request_options)
+        .and_return(response)
     end
 
     subject { query.get(*graph) }
@@ -152,13 +153,19 @@ describe ActiveGraphQL::Query do
     end
 
     context 'with params' do
-      it { is_expected.to eq 'someLongParamName1: "value1", someLongParamName2: "value2"' }
+      it do
+        is_expected.to eq 'someLongParamName1: "value1", '\
+                             'someLongParamName2: "value2"'
+      end
     end
   end
 
   describe '#qgraph' do
     subject { query.qgraph(graph) }
 
-    it { is_expected.to eq 'attr1, object { nestedAttr, nestedObject { superNestedAttr } }, attr2' }
+    it do
+      is_expected.to eq 'attr1, object { nestedAttr, '\
+                           'nestedObject { superNestedAttr } }, attr2'
+    end
   end
 end
