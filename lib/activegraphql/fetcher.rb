@@ -21,7 +21,7 @@ module ActiveGraphQL
     end
 
     def fetch(*graph)
-      response = query_get(*graph)
+      response = query_call(*graph)
 
       return if response.blank?
 
@@ -35,7 +35,7 @@ module ActiveGraphQL
       end
     end
 
-    def query_get(*graph)
+    def query_call(*graph)
       Retriable.retriable(retriable_config) { query.get(*graph) }
     end
 
