@@ -121,6 +121,92 @@ describe ActiveGraphQL::Query do
     end
   end
 
+  describe '#post' do
+    let(:response) do
+      { 'data' => { 'someLongActionName' => { 'someExpected' => 'data' } } }
+    end
+
+    before do
+      expect(HTTParty)
+        .to receive(:post).with(url, expected_request_options)
+        .and_return(response)
+    end
+
+    subject { query.post(*graph) }
+
+    context 'with timeout configured' do
+      let(:expected_request_options) do
+        { query: { query: expected_query_with_params }, timeout: 0.1 }
+      end
+
+      let(:config) do
+        { url: url,
+          http: { timeout: 0.1 } }
+      end
+
+      it { is_expected.to eq(some_expected: 'data') }
+    end
+
+    context 'without timeout configured' do
+      let(:expected_request_options) do
+        { query: { query: expected_query_with_params } }
+      end
+
+      context 'with no errors in the response' do
+        it { is_expected.to eq(some_expected: 'data') }
+
+        context 'with locale' do
+          let(:locale) { :en }
+
+          let(:expected_request_options) do
+            { headers: { 'Accept-Language' => locale.to_s },
+              query: { query: expected_query_with_params } }
+          end
+
+          before { query.locale = locale }
+
+          it { is_expected.to eq(some_expected: 'data') }
+        end
+      end
+
+      context 'with errors in the response' do
+        let(:response) do
+          {
+            'errors' => [
+              { 'message' => 'message1' },
+              { 'message' => 'message2' }
+            ]
+          }
+        end
+
+        it 'fails with an error' do
+          expect { subject }.to raise_error(ActiveGraphQL::Query::ServerError,
+                                            /"message1", "message2"/)
+        end
+      end
+    end
+
+    context 'with bearer auth strategy configured' do
+      let(:token) { 'some.token' }
+
+      let(:expected_request_options) do
+        { query: { query: expected_query_with_params },
+          headers: { 'Authorization' => "Bearer #{token}" } }
+      end
+
+      let(:config) do
+        { url: url,
+          auth: { strategy: :bearer, class: Object } }
+      end
+
+      before do
+        expect(Object).to receive(:encode).and_return(token)
+      end
+
+      it { is_expected.to eq(some_expected: 'data') }
+    end
+  end
+
   describe '#to_s' do
     subject do
       query.tap { |q| q.graph = graph }.to_s
