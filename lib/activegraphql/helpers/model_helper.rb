@@ -3,9 +3,9 @@ module ActiveGraphQL
     module ModelHelper
       def map_to_s(conditions = {})
         return '' if conditions.blank?
-        return conditions if conditions.is_a?(String)
+        return { order: conditions } if conditions.is_a?(String)
         return '' unless conditions.is_a?(Hash)
-        conditions.to_a.collect { |x| x.join(' ') }.join(', ')
+        { order: conditions.to_a.collect { |x| x.join(' ') }.join(', ') }
       end
     end
   end
