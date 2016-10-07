@@ -94,7 +94,7 @@ describe ActiveGraphQL::Model do
     end
 
     before do
-      allow(ActiveGraphQL::Model).to receive(:transform).and_return(conditions)
+      allow(ActiveGraphQL::Model).to receive(:map_to_s).and_return(conditions)
     end
 
     subject { configured_class.order(conditions) }
