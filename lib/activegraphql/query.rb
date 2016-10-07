@@ -8,11 +8,14 @@ module ActiveGraphQL
 
     class ServerError < StandardError; end
 
-    def get(*graph)
+    def call(*graph)
       self.graph = graph
-
-      self.response = HTTParty.get(config[:url], request_options)
-
+      method = config[:method] || :get
+      if method == :post
+        self.response = HTTParty.post(config[:url], request_options)
+      else
+        self.response = HTTParty.get(config[:url], request_options)
+      end
       raise(ServerError, response_error_messages) if response_errors.present?
       response_data
     end
