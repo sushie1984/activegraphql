@@ -33,6 +33,7 @@ Any subclass of `ActiveGraphQL::Model` provides the following methods:
 - **all:** Retrive all objects for the entity.
 - **where(conditions):** Retrieve all objects for the entity finding by conditions.
 - **find_by(conditions):** Retrieve first object for the entity finding by conditions.
+- **order(conditions):** Retrieve all objects for the entity in a specific order (has to be supported by your graphql-server)
 
 Any one of these methods returns an `ActiveGraphQL::Fetcher` who provides the method `fetch(*graph)` that is responsible of calling the service. The `*graph` arguments allow to specify how the response format will be.
 
@@ -88,6 +89,24 @@ Resolved query:
 
 ```
 { myModel("id": "5") { id, name, nestedObject { description } } }
+```
+
+**Retrieving (sql) order by field for `MyModel` objects**
+
+```ruby
+>> MyModel.order(name: :asc).fetch(:id, :name)
+=> "[
+      { 'id':  '5', 'name': 'AFoo'},
+      { 'id':  '1', 'name': 'BBar'},
+      ...
+      { 'id':  '2', 'name': 'ZMoo'},
+    ]"
+```
+
+Resolved query:
+
+```
+{ myModel(order: "name asc") { id, name } }
 ```
 
 ## Localisation support
