@@ -13,9 +13,9 @@ describe ActiveGraphQL::Helpers::ModelHelper do
     it_behaves_like 'map_to_s', '', ''
     it_behaves_like 'map_to_s', '  ', ''
     it_behaves_like 'map_to_s', nil, ''
-    it_behaves_like 'map_to_s', 'FIELD ASC', 'FIELD ASC'
-    it_behaves_like 'map_to_s', { name: :asc }, 'name asc'
-    it_behaves_like 'map_to_s', { name: :asc, id: :desc }, 'name asc, id desc'
+    it_behaves_like 'map_to_s', 'FIELD ASC', { order: 'FIELD ASC' }
+    it_behaves_like 'map_to_s', { name: :asc }, { order: 'name asc' }
+    it_behaves_like 'map_to_s', { name: :asc, id: :desc }, { order: 'name asc, id desc' }
     it_behaves_like 'map_to_s', Class.new, ''
   end
 end
