@@ -35,7 +35,7 @@ describe ActiveGraphQL::Query do
     ' }'
   end
 
-  describe '#get' do
+  describe '#call' do
     let(:response) do
       { 'data' => { 'someLongActionName' => { 'someExpected' => 'data' } } }
     end
@@ -46,7 +46,7 @@ describe ActiveGraphQL::Query do
         .and_return(response)
     end
 
-    subject { query.get(*graph) }
+    subject { query.call(*graph) }
 
     context 'with timeout configured' do
       let(:expected_request_options) do
@@ -121,137 +121,40 @@ describe ActiveGraphQL::Query do
     end
   end
 
-  describe '#post' do
-    let(:response) do
-      { 'data' => { 'someLongActionName' => { 'someExpected' => 'data' } } }
-    end
-
-    before do
-      expect(HTTParty)
-        .to receive(:post).with(url, expected_request_options)
-        .and_return(response)
-    end
-
-    subject { query.post(*graph) }
-
-    context 'with timeout configured' do
-      let(:expected_request_options) do
-        { query: { query: expected_query_with_params }, timeout: 0.1 }
+  describe '#query_method' do
+    context 'with nil config' do
+      it 'returns :get' do
+        expect(query.query_method).to eq(:get)
       end
+    end
 
+    context 'with :post config' do
       let(:config) do
-        { url: url,
-          http: { timeout: 0.1 } }
+        { url: url, method: :post }
       end
 
-      it { is_expected.to eq(some_expected: 'data') }
-    end
-
-    context 'without timeout configured' do
-      let(:expected_request_options) do
-        { query: { query: expected_query_with_params } }
-      end
-
-      context 'with no errors in the response' do
-        it { is_expected.to eq(some_expected: 'data') }
-
-        context 'with locale' do
-          let(:locale) { :en }
-
-          let(:expected_request_options) do
-            { headers: { 'Accept-Language' => locale.to_s },
-              query: { query: expected_query_with_params } }
-          end
-
-          before { query.locale = locale }
-
-          it { is_expected.to eq(some_expected: 'data') }
-        end
-      end
-
-      context 'with errors in the response' do
-        let(:response) do
-          {
-            'errors' => [
-              { 'message' => 'message1' },
-              { 'message' => 'message2' }
-            ]
-          }
-        end
-
-        it 'fails with an error' do
-          expect { subject }.to raise_error(ActiveGraphQL::Query::ServerError,
-                                            /"message1", "message2"/)
-        end
+      it 'returns :post' do
+        expect(query.query_method).to eq(:post)
       end
     end
 
-    context 'with bearer auth strategy configured' do
-      let(:token) { 'some.token' }
-
-      let(:expected_request_options) do
-        { query: { query: expected_query_with_params },
-          headers: { 'Authorization' => "Bearer #{token}" } }
-      end
-
+    context 'with :patch config' do
       let(:config) do
-        { url: url,
-          auth: { strategy: :bearer, class: Object } }
+        { url: url, method: :patch }
+      end
+      let(:warning) do
+        "patch is currently not supported"
       end
 
-      before do
-        expect(Object).to receive(:encode).and_return(token)
+      it 'returns :get' do
+        expect(query.query_method).to eq(:get)
       end
 
-      it { is_expected.to eq(some_expected: 'data') }
-    end
-  end
-
-  describe '#to_s' do
-    subject do
-      query.tap { |q| q.graph = graph }.to_s
-    end
-
-    context 'without params' do
-      let(:params) { nil }
-
-      it { is_expected.to eq expected_query_without_params }
-    end
-
-    context 'with params' do
-      it { is_expected.to eq expected_query_with_params }
-    end
-  end
-
-  describe '#qaction' do
-    subject { query.qaction }
-
-    it { is_expected.to eq 'someLongActionName' }
-  end
-
-  describe 'qparams' do
-    subject { query.qparams }
-
-    context 'without params' do
-      let(:params) { nil }
-
-      it { is_expected.to be_nil }
-    end
-
-    context 'with params' do
-      it do
-        is_expected.to eq 'someLongParamName1: "value1", '\
-                             'someLongParamName2: "value2"'
+      it 'displays a warning' do
+        query.query_method
+        
+        expect { warn(warning) }.to output.to_stderr
       end
-    end
-  end
-
-  describe '#qgraph' do
-    subject { query.qgraph(graph) }
-
-    it do
-      is_expected.to eq 'attr1, object { nestedAttr, '\
-                           'nestedObject { superNestedAttr } }, attr2'
     end
   end
 end
