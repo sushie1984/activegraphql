@@ -143,7 +143,7 @@ describe ActiveGraphQL::Query do
         { url: url, method: :patch }
       end
       let(:warning) do
-        "patch is currently not supported"
+        'patch is currently not supported'
       end
 
       it 'returns :get' do
@@ -152,7 +152,7 @@ describe ActiveGraphQL::Query do
 
       it 'displays a warning' do
         query.query_method
-        
+
         expect { warn(warning) }.to output.to_stderr
       end
     end
