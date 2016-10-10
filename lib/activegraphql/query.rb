@@ -5,7 +5,7 @@ require 'activegraphql/support/fancy'
 module ActiveGraphQL
   class Query < Support::Fancy
     attr_accessor :config, :action, :params, :locale, :graph, :response
-
+    QUERY_METHODS = %i(get post)
     class ServerError < StandardError; end
 
     def call(*graph)
