@@ -10,8 +10,7 @@ module ActiveGraphQL
 
     def call(*graph)
       self.graph = graph
-      method = config[:method] || :get
-      if method == :post
+      if query_method == :post
         self.response = HTTParty.post(config[:url], request_options)
       else
         self.response = HTTParty.get(config[:url], request_options)
