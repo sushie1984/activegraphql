@@ -41,12 +41,10 @@ describe ActiveGraphQL::Query do
     end
 
     context 'focus config timeout & bearer' do
-
       before do
         expect(HTTParty)
-        .to receive(:get).with(url, expected_request_options)
-        .and_return(response)
-
+          .to receive(:get).with(url, expected_request_options)
+          .and_return(response)
       end
 
       subject { query.call(*graph) }
@@ -77,7 +75,7 @@ describe ActiveGraphQL::Query do
 
             let(:expected_request_options) do
               { headers: { 'Accept-Language' => locale.to_s },
-              query: { query: expected_query_with_params } }
+                query: { query: expected_query_with_params } }
             end
 
             before { query.locale = locale }
@@ -98,7 +96,7 @@ describe ActiveGraphQL::Query do
 
           it 'fails with an error' do
             expect { subject }.to raise_error(ActiveGraphQL::Query::ServerError,
-            /"message1", "message2"/)
+                                              /"message1", "message2"/)
           end
         end
       end
@@ -108,28 +106,28 @@ describe ActiveGraphQL::Query do
 
         let(:expected_request_options) do
           { query: { query: expected_query_with_params },
-          headers: { 'Authorization' => "Bearer #{token}" } }
+            headers: { 'Authorization' => "Bearer #{token}" } }
         end
 
         let(:config) do
           { url: url,
             auth: { strategy: :bearer, class: Object } }
-          end
-
-          before do
-            expect(Object).to receive(:encode).and_return(token)
-          end
-
-          it { is_expected.to eq(some_expected: 'data') }
         end
+
+        before do
+          expect(Object).to receive(:encode).and_return(token)
+        end
+
+        it { is_expected.to eq(some_expected: 'data') }
+      end
     end
 
     context 'focus config http query methods' do
       context 'method not configured' do
         before do
           expect(HTTParty)
-          .to receive(:get).with(url, expected_request_options)
-          .and_return(response)
+            .to receive(:get).with(url, expected_request_options)
+            .and_return(response)
         end
 
         let(:expected_request_options) do
@@ -148,8 +146,8 @@ describe ActiveGraphQL::Query do
       context 'method post configured' do
         before do
           expect(HTTParty)
-          .to receive(:post).with(url, expected_request_options)
-          .and_return(response)
+            .to receive(:post).with(url, expected_request_options)
+            .and_return(response)
         end
 
         let(:expected_request_options) do
@@ -168,8 +166,8 @@ describe ActiveGraphQL::Query do
       context 'method patch configured' do
         before do
           expect(HTTParty)
-          .to receive(:get).with(url, expected_request_options)
-          .and_return(response)
+            .to receive(:get).with(url, expected_request_options)
+            .and_return(response)
 
           expect do
             warn('patch is not supported, using default get')
