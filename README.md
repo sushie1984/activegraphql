@@ -28,7 +28,7 @@ class MyModel < ActiveGraphQL::Model
 end
 ```
 
-You can also specific which query method should be used (either get that is default for no config or post is supported).
+You can also specify which query method should be used (either get that is default for no config or post is supported).
 
 ```ruby
 class MyModel < ActiveGraphQL::Model
