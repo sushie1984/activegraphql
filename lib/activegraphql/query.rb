@@ -85,13 +85,6 @@ module ActiveGraphQL
       graph_strings.join(', ')
     end
 
-    def query_method
-      method = config[:method]
-      return method if QUERY_METHODS.include?(method)
-      warn("#{method} is currently not supported") unless method.blank?
-      :get
-    end
-
     private
 
     def auth_header?
@@ -124,6 +117,14 @@ module ActiveGraphQL
       else
         value
       end
+    end
+
+    def http_response
+      url = config[:url]
+      method = config[:method] || :get
+      return HTTParty.post(url, request_options) if method == :post
+      warn("#{method} is not supported, using default get") if method != :get
+      HTTParty.get(url, request_options)
     end
   end
 end
