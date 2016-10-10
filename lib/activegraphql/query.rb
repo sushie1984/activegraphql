@@ -5,16 +5,11 @@ require 'activegraphql/support/fancy'
 module ActiveGraphQL
   class Query < Support::Fancy
     attr_accessor :config, :action, :params, :locale, :graph, :response
-    QUERY_METHODS = %i(get post).freeze
     class ServerError < StandardError; end
 
     def call(*graph)
       self.graph = graph
-      if query_method == :post
-        self.response = HTTParty.post(config[:url], request_options)
-      else
-        self.response = HTTParty.get(config[:url], request_options)
-      end
+      self.response = http_response
       raise(ServerError, response_error_messages) if response_errors.present?
       response_data
     end
