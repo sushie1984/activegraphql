@@ -95,6 +95,13 @@ module ActiveGraphQL
       graph_strings.join(', ')
     end
 
+    def query_method
+      method = config[:method]
+      return method if QUERY_METHODS.include?(method)
+      warn("#{method} is currently not supported") unless method.blank?
+      :get
+    end
+
     private
 
     def auth_header?
