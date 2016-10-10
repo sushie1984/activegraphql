@@ -28,6 +28,14 @@ class MyModel < ActiveGraphQL::Model
 end
 ```
 
+You can also specific which query method should be used (either get that is default for no config or post is supported).
+
+```ruby
+class MyModel < ActiveGraphQL::Model
+  configure url: 'http://some-graphql-service/endpoint', method: :post
+end
+```
+
 Any subclass of `ActiveGraphQL::Model` provides the following methods:
 
 - **all:** Retrive all objects for the entity.
