@@ -30,7 +30,7 @@ describe ActiveGraphQL::Fetcher do
   describe '#fetch' do
     before do
       expect(fetcher)
-        .to receive(:query_get).with(*graph).and_return(query_response)
+        .to receive(:query_call).with(*graph).and_return(query_response)
     end
 
     context 'with hash response' do
@@ -74,7 +74,7 @@ describe ActiveGraphQL::Fetcher do
     end
   end
 
-  describe '#query_get' do
+  describe '#query_call' do
     let(:response) { double(:response) }
 
     before do
@@ -83,13 +83,13 @@ describe ActiveGraphQL::Fetcher do
                                action: action,
                                params: params).and_return(query)
 
-      expect(query).to receive(:get).with(*graph).and_return(response)
+      expect(query).to receive(:call).with(*graph).and_return(response)
 
       expect(Retriable).to receive(:retriable).with(expected_retriable_params)
         .and_call_original
     end
 
-    subject { fetcher.query_get(*graph) }
+    subject { fetcher.query_call(*graph) }
 
     context 'without retriable config' do
       let(:expected_retriable_params) do
