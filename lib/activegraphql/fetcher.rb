@@ -36,7 +36,7 @@ module ActiveGraphQL
     end
 
     def query_call(*graph)
-      Retriable.retriable(retriable_config) { query.get(*graph) }
+      Retriable.retriable(retriable_config) { query.call(*graph) }
     end
 
     def retriable_config
