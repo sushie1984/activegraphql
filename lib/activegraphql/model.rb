@@ -18,6 +18,11 @@ module ActiveGraphQL
       #      configure url: 'http://localhost:3000/graphql'
       #    end
       #
+      #  Example which query method (get or post) should be used (default :get)
+      #    class BaseModelToMyService < ActiveGraphql::Model
+      #      configure url: 'http://localhost:3000/graphql', method: :get
+      #    end
+      #
       #    class ModelToMyService < BaseModelToMyService
       #    end
       #
